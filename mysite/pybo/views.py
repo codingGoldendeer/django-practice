@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
+from django.http import HttpResponseNotAllowed
 from .models import Question
 from django.utils import timezone
 from .forms import QuestionForm, AnswerForm
@@ -23,11 +23,12 @@ def answer_create(request, question_id):
             answer.question = question
             answer.create_date = timezone.now()
             answer.save()
-            return redirect('pybo:detail', question.id)
+            return redirect('pybo:detail', question_id=question.id)
     else:
-        form = AnswerForm()
-    context = {'question':question, 'form':form}
+        return HttpResponseNotAllowed('Only POST is possible')
+    context = {'question': question, 'form': form}
     return render(request, 'pybo/question_detail.html', context)
+
 
 def question_create(request):
     if request.method == 'POST':
