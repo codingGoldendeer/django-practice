@@ -1,11 +1,16 @@
+import logging
+
 from django.core.paginator import Paginator
-from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
+from django.shortcuts import render, get_object_or_404
+
+logger = logging.getLogger('pybo')
 
 from ..models import Question
 
 
 def index(request):
+    logger.info("INFO 레벨로 출력")
     page = request.GET.get('page', '1')
     kw = request.GET.get('kw', '')
     question_list = Question.objects.order_by('-create_date')
